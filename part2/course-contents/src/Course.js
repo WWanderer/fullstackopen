@@ -24,21 +24,26 @@ const Content = ({ parts }) => {
 
 const Total = (props) => {
 	const parts = props.parts
-	console.log("parts", parts)
 	return (
 		<p>Number of exercises: {parts.reduce((sum, part) => sum + part.exercises, 0)}</p>
+	)
+}
+
+const Course = ({ course }) => {
+	return (
+		<div>
+			<Header course={course.name}></Header>
+			<Content parts={course.parts}></Content>
+			<Total parts={course.parts}></Total>
+		</div>
 	)
 }
 
 const Courses = ({ courses }) => {
 	return (
 		<div>
-			{courses.map(course =>
-				[
-					<Header course={course.name}></Header>,
-					<Content parts={course.parts}></Content>,
-					<Total parts={course.parts}></Total>
-				]
+			{courses.map((course, i) =>
+				<Course key={i} course={course}></Course>
 			)}
 		</div>
 	)
