@@ -8,17 +8,17 @@ const Header = (props) => {
 
 const Part = ({ name, exercises }) => {
 	return (
-		<li>{name}: {exercises} exercises</li>
+		<p>{name}: {exercises} exercises</p>
 	)
 }
 
 const Content = ({ parts }) => {
 	return (
-		<ul>
+		<div>
 			{parts.map((part, i) =>
 				<Part key={i} name={part.name} exercises={part.exercises}></Part>
 			)}
-		</ul>
+		</div>
 	)
 }
 
