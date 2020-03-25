@@ -1,14 +1,13 @@
 import React from 'react'
 
-const Filter = ({ persons, setPersonsToShow }) => {
-    const filterName = (event) => {
-        const filter = persons.filter(p => p.name.toLowerCase().includes(event.target.value))
-        setPersonsToShow(filter)
+const Filter = ({ setFilter }) => {
+    const filter = (event) => {
+        setFilter(event.target.value)
     }
     return (
         <div>
             search <input
-                onChange={filterName}
+                onChange={filter}
             />
         </div>
     )

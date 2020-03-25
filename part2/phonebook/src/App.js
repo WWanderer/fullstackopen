@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter.js'
 import PersonForm from './components/PersonForm.js'
 import Persons from './components/Persons.js'
@@ -6,21 +7,20 @@ import Persons from './components/Persons.js'
 
 
 const App = () => {
-	const [persons, setPersons] = useState([
-		{ name: 'Arto Hellas', number: '040-123456' },
-		{ name: 'Ada Lovelace', number: '39-44-5323523' },
-		{ name: 'Dan Abramov', number: '12-43-234345' },
-		{ name: 'Mary Poppendieck', number: '39-23-6423122' }
-	])
-
-	const [personsToShow, setPersonsToShow] = useState(persons)
-
+	const [persons, setPersons] = useState([])
+	const [filter, setFilter] = useState('')
+	useEffect(() => {
+		axios
+			.get('http://localhost:3001/persons')
+			.then(response => {
+				setPersons(response.data)
+			})
+	}, [])
 	return (
 		<div>
 			<h2>Phonebook</h2>
 			<Filter
-				persons={persons}
-				setPersonsToShow={setPersonsToShow}
+				setFilter={setFilter}
 			/>
 			<h2> Add person</h2>
 			<PersonForm
@@ -29,7 +29,8 @@ const App = () => {
 			/>
 			<h2>Numbers</h2>
 			<Persons
-				persons={personsToShow}
+				persons={persons}
+				filter={filter}
 			/>
 		</div>
 	)

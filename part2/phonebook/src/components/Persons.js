@@ -6,9 +6,10 @@ const Person = ({ name, number }) => {
     )
 }
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, filter }) => {
+    const toDisplay = persons.filter(p => p.name.toLowerCase().includes(filter))
     return (
-        persons.map(p =>
+        toDisplay.map(p =>
             <Person key={p.name} name={p.name} number={p.number}></Person>
         )
     )
