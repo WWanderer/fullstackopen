@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import dbService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setNotification }) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
 
@@ -26,10 +26,17 @@ const PersonForm = ({ persons, setPersons }) => {
             if (result) {
                 const pers = persons.find(p => p.name === newPerson.name)
                 pers.number = newPerson.number
-                dbService.update(pers).then(rsp => {
-                    // console.log(rsp)
-                    setPersons(persons.map(p => p.id === pers.id ? pers : p))
-                })
+                dbService.update(pers)
+                    .then(rsp => {
+                        // console.log(rsp)
+                        setPersons(persons.map(p => p.id === pers.id ? pers : p))
+                    })
+                    .catch(err => {
+                        setNotification(`${pers.name} was already removed from the database`)
+                        setTimeout(() => {
+                            setNotification(null)
+                        }, 2000);
+                    })
             }
         } else {
             dbService
@@ -37,6 +44,12 @@ const PersonForm = ({ persons, setPersons }) => {
                 .then(rsp => {
                     // console.log(rsp)
                     setPersons(persons.concat(rsp))
+                })
+                .finally(x => {
+                    setNotification(`${newPerson.name} was added to the database`)
+                    setTimeout(() => {
+                        setNotification(null)
+                    }, 2000);
                 })
         }
         setNewName('')
