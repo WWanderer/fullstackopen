@@ -1,7 +1,13 @@
 const express = require("express")
+const morgan = require('morgan')
 
 const app = express()
 app.use(express.json())
+app.use(morgan('tiny'))
+
+let bodyLog = ''
+
+morgan.token('body', (req, res) => JSON.stringify(bodyLog))
 
 let persons =
     [
@@ -58,30 +64,27 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-app.post('/api/persons/', (req, res) => {
+app.post('/api/persons/', morgan(':body'), (req, res) => {
     const body = req.body
-    console.log(req)
-
+    // console.log(req.body)
     if (!body.name || !body.number) {
         return res.status(400).json({
             error: 'content missing'
         })
     }
-
     if (persons.find(p => p.name === body.name)) {
         return res.status(400).json({
             error: 'name already in phonebook'
         })
     }
-
     const person = {
         name: body.name,
         number: body.number,
         id: Math.floor(Math.random() * 100)
     }
     persons = persons.concat(person)
-    console.log(persons)
-
+    // console.log(person)
+    bodyLog = person
     res.json(person)
 })
 
